@@ -139,6 +139,7 @@
             this.MinimumSize = new System.Drawing.Size(960, 620);
             this.Name = "ConwayMain";
             this.Text = "Conway\'s Game of Life";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConwayMain_FormClosing);
             this.Load += new System.EventHandler(this.ConwayMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).EndInit();

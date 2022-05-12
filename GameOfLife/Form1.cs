@@ -170,6 +170,12 @@ namespace GameOfLife
                 Application.DoEvents();
             }
         }
+
+        private void ConwayMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            InProgress = false;
+            Application.Exit();
+        }
     }
 
     public class Cell
