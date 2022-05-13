@@ -229,9 +229,9 @@ namespace GameOfLife
             // Iterate through the defined range and look for active neighbors.
             for(int x = startIndex; x < endIndex; x++)
             {
-                if (Grid.gridCells[x].Location != cell.Location)
+                if (Math.Abs(cell.XPos - gridCells[x].XPos) < 2 && Math.Abs(cell.YPos - gridCells[x].YPos) < 2)
                 {
-                    if (Math.Abs(cell.XPos - gridCells[x].XPos) < 2 && Math.Abs(cell.YPos - gridCells[x].YPos) < 2)
+                    if (Grid.gridCells[x].Location != cell.Location)
                     {
                         if (gridCells[x].IsAlive)
                         {
