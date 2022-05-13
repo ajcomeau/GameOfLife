@@ -13,6 +13,7 @@ namespace GameOfLife
     public partial class ConwayMain : Form
     {
         Boolean InProgress;
+        Grid CellGrid;
 
         public ConwayMain()
         {
@@ -34,6 +35,9 @@ namespace GameOfLife
             // Determine number of rows and columns in grid.
             int rows = (int)(pbGrid.Height / numSSize.Value);
             int cols = (int)(pbGrid.Width / numSSize.Value);
+
+            // Create grid object.
+            CellGrid = new Grid(rows, cols);
             
             // Create grid with image, graphics object and brush for drawing.
             using(Bitmap bmp = new Bitmap(pbGrid.Width, pbGrid.Height))     
@@ -45,7 +49,7 @@ namespace GameOfLife
                 pbGrid.Image = (Bitmap)bmp;
 
                 // Clear and rebuild the list of cells, activating 15% of cells at random.
-                Cell.gridCells.Clear();
+                Grid.gridCells.Clear();
 
                 for(int y = 0; y < rows; y++)
                 {
@@ -54,12 +58,14 @@ namespace GameOfLife
                         locPoint = new Point((int)(x * numSSize.Value), (int)(y * numSSize.Value));
                         newCell = new Cell(locPoint, x, y);
                         newCell.IsAlive = (random.Next(100) < 15) ? true : false;
-                        Cell.gridCells.Add(newCell);
+                        Grid.gridCells.Add(newCell);
                     }
                 }
 
+                Grid.gridCells = Grid.gridCells.OrderBy(c => c.XPos).OrderBy(c => c.YPos).ToList();
+
                 // Plot all the newly created cells to the grid.
-                foreach (Cell cell in Cell.gridCells)
+                foreach (Cell cell in Grid.gridCells)
                 {
                     if (cell.IsAlive)
                     {
@@ -76,9 +82,9 @@ namespace GameOfLife
         {
             cboCells.Items.Clear();
             // Demo function to test LiveAdjacent function.
-            foreach (Cell Cell in Cell.gridCells)
+            foreach (Cell Cell in Grid.gridCells)
             {
-                cboCells.Items.Add($"X:{Cell.XPos}, Y:{Cell.YPos}, Count: {Cell.LiveAdjacent()}");
+                cboCells.Items.Add($"X:{Cell.XPos}, Y:{Cell.YPos}, Count: {CellGrid.LiveAdjacent(Cell)}");
             }
 
         }
@@ -104,9 +110,9 @@ namespace GameOfLife
             */
 
             // Calculate next status of each cell.
-            foreach (Cell cell in Cell.gridCells)
+            foreach (Cell cell in Grid.gridCells)
             {
-                int activeCount = cell.LiveAdjacent();
+                int activeCount = CellGrid.LiveAdjacent(cell);
 
                 if (cell.IsAlive)
                 {
@@ -124,7 +130,7 @@ namespace GameOfLife
             }
 
             // For each cell, update IsAlive with NextStatus
-            foreach (Cell cell in Cell.gridCells)
+            foreach (Cell cell in Grid.gridCells)
             {
                 cell.IsAlive = cell.NextStatus;
             }
@@ -136,7 +142,7 @@ namespace GameOfLife
             {
                 g.Clear(Color.Black);
 
-                foreach (Cell cell in Cell.gridCells)
+                foreach (Cell cell in Grid.gridCells)
                 {
                     if (cell.IsAlive)
                     {
@@ -173,15 +179,75 @@ namespace GameOfLife
 
         private void ConwayMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Make sure the program ends when the form is closed.
             InProgress = false;
             Application.Exit();
         }
     }
 
-    public class Cell
+    public class Grid
     {
         public static List<Cell> gridCells = new List<Cell>();
 
+        private int cRows;
+        private int cCols;
+
+        public Grid(int rows, int columns)
+        {
+            this.Rows = rows;
+            this.Columns = columns;
+        }
+
+        public int Rows
+        {
+            get { return cRows; }
+            set { cRows = value; }
+        }
+
+        public int Columns
+        {
+            get { return cCols; }
+            set { cCols = value; }
+        }
+
+        public int LiveAdjacent(Cell cell)
+        {
+            // Function to return number of active neighboring cells.
+            // Use cell index numbers to search range of cells for active neighbors.
+
+            int liveAdjacent = 0;
+
+            // Get range of cells to be examined for active neighbors.
+            int cellIndex = (cell.YPos * this.Columns) + cell.XPos;
+            int startIndex = cellIndex - this.Columns - 2;
+            int endIndex = cellIndex + this.Columns + 2;
+
+            // Ensure that the start and end indexes don't exceed the grid range.
+            startIndex = (startIndex < 0) ? 0 : startIndex;
+            endIndex = (endIndex > (Grid.gridCells.Count - 1)) ? Grid.gridCells.Count - 1 : endIndex;
+
+            // Iterate through the defined range and look for active neighbors.
+            for(int x = startIndex; x < endIndex; x++)
+            {
+                if (Grid.gridCells[x].Location != cell.Location)
+                {
+                    if (Math.Abs(cell.XPos - gridCells[x].XPos) < 2 && Math.Abs(cell.YPos - gridCells[x].YPos) < 2)
+                    {
+                        if (gridCells[x].IsAlive)
+                        {
+                            liveAdjacent++;
+                        }
+                    }
+                }
+            }
+
+            return liveAdjacent;
+        }
+
+    }
+
+    public class Cell
+    {
         private Point cLocation;
         private int cXPos;
         private int cYPos;
@@ -229,25 +295,10 @@ namespace GameOfLife
             set { cNext = value; }
         }
 
-
-        public int LiveAdjacent()
+        public override string ToString()
         {
-            // Function to return number of active neighboring cells.
-
-            int liveAdjacent = 0;
-
-            foreach (Cell cell in Cell.gridCells)
-            {
-                if (cell.Location != this.Location && cell.IsAlive)
-                {
-                    if (Math.Abs(cell.XPos - this.XPos) < 2 && Math.Abs(cell.YPos - this.YPos) < 2)
-                    {
-                        liveAdjacent++;
-                    }
-                }
-            }
-
-            return liveAdjacent;
+            //Override the cell ToString to provide location information.
+            return $"GridX:{this.XPos}  GridY:{this.YPos}  LocX:{this.Location.X}  LocY:{this.Location.Y}";
         }
 
     }
