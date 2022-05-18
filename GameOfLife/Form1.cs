@@ -38,44 +38,23 @@ namespace GameOfLife
 
             // Create grid object.
             CellGrid = new Grid(rows, cols);
-            
-            // Create grid with image, graphics object and brush for drawing.
-            using(Bitmap bmp = new Bitmap(pbGrid.Width, pbGrid.Height))     
-            using(Graphics g = Graphics.FromImage(bmp))                     
-            using(SolidBrush cellBrush = new SolidBrush(Color.DarkOrange))  
+
+            // Clear and rebuild the list of cells, activating 15% of cells at random.
+            Grid.gridCells.Clear();
+
+            for (int y = 0; y < rows; y++)
             {
-                // Create black canvas and add it to the picture box.
-                g.Clear(Color.Black);               
-                pbGrid.Image = (Bitmap)bmp;
-
-                // Clear and rebuild the list of cells, activating 15% of cells at random.
-                Grid.gridCells.Clear();
-
-                for(int y = 0; y < rows; y++)
+                for (int x = 0; x < cols; x++)
                 {
-                    for(int x = 0; x < cols; x++)
-                    {
-                        locPoint = new Point((int)(x * numSSize.Value), (int)(y * numSSize.Value));
-                        newCell = new Cell(locPoint, x, y);
-                        newCell.IsAlive = (random.Next(100) < 15) ? true : false;
-                        Grid.gridCells.Add(newCell);
-                    }
+                    newCell = new Cell(x, y, (int)numSSize.Value);
+                    newCell.IsAlive = (random.Next(100) < 15) ? true : false;
                 }
-
-                Grid.gridCells = Grid.gridCells.OrderBy(c => c.XPos).OrderBy(c => c.YPos).ToList();
-
-                // Plot all the newly created cells to the grid.
-                foreach (Cell cell in Grid.gridCells)
-                {
-                    if (cell.IsAlive)
-                    {
-                        g.FillRectangle(cellBrush, new Rectangle(cell.Location, 
-                            new Size((int)numSSize.Value - 1, (int)numSSize.Value - 1)));
-                    }
-                }
-
-                pbGrid.Image = (Bitmap)bmp.Clone();
             }
+
+            Grid.gridCells = Grid.gridCells.OrderBy(c => c.XPos).OrderBy(c => c.YPos).ToList();
+
+            UpdateGrid(CellGrid);
+
         }
 
         private void GetActiveCounts()
@@ -135,6 +114,16 @@ namespace GameOfLife
                 cell.IsAlive = cell.NextStatus;
             }
 
+            UpdateGrid(CellGrid);
+
+
+        }
+
+        private void UpdateGrid(Grid GridDisplay)
+        {
+            Cell newCell;
+            Random random = new Random();
+
             // Create new image and update picture box.
             using (Bitmap bmp = new Bitmap(pbGrid.Width, pbGrid.Height))
             using (Graphics g = Graphics.FromImage(bmp))
@@ -146,16 +135,17 @@ namespace GameOfLife
                 {
                     if (cell.IsAlive)
                     {
-                        g.FillRectangle(cellBrush, new Rectangle(cell.Location, 
-                            new Size((int)numSSize.Value - 1, (int)numSSize.Value - 1)));
+                        g.FillRectangle(cellBrush, cell.CellDisplay);
                     }
                 }
 
-                pbGrid.Image.Dispose();  // Release resources from previous image.
+                if(pbGrid.Image != null)                
+                    pbGrid.Image.Dispose();  // Release resources from previous image.
+                
                 pbGrid.Image = (Bitmap)bmp.Clone();
             }
         }
-
+        
         private void btnAdvance_Click(object sender, EventArgs e)
         {
             GetNextState();
@@ -182,6 +172,7 @@ namespace GameOfLife
             // Make sure the program ends when the form is closed.
             InProgress = false;
             Application.Exit();
+            
         }
     }
 
@@ -249,6 +240,8 @@ namespace GameOfLife
     public class Cell
     {
         private Point cLocation;
+        private Rectangle cCellDisplay;
+        private Size cCellSize;
         private int cXPos;
         private int cYPos;
         private Boolean cIsAlive;
@@ -256,11 +249,43 @@ namespace GameOfLife
 
         public Cell(Point location, int X, int Y)
         {
+            int cellSize;
+            // Set object settings and add to grid.
             this.Location = location;
             this.YPos = Y;
             this.XPos = X;
+            Grid.gridCells.Add(this);
+            // If location is not 0, divide pixel location by grid location to get the size of the cell.
+            cellSize = (X == 0) ? 0 : location.X / X;
+
+            // Create rectangle to display as needed using calculated cell size.
+            this.CellDisplay = new Rectangle(this.Location, new Size(cellSize, cellSize));
         }
-        
+
+        public Cell(int X, int Y, int CellSize)
+        {
+            this.Location = new Point(X * CellSize, Y * CellSize);
+            this.XPos = X;
+            this.YPos = Y;
+            this.CellSize = new Size(CellSize, CellSize);
+            Grid.gridCells.Add(this);
+            this.CellDisplay = new Rectangle(this.Location, new Size(CellSize - 1, CellSize - 1));
+        }
+
+        public Rectangle CellDisplay
+        {
+            // Rectangle object for displaying cell when needed.
+            get { return cCellDisplay; }
+            set { cCellDisplay = value; }
+        }
+
+        public Size CellSize
+        {
+            // Calculated cell size.
+            get { return cCellSize; }
+            set { cCellSize = value; }
+        }
+
         public Point Location
         {
             // X,Y Point that specifies cell location.
