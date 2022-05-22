@@ -34,7 +34,7 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.btnAdvance = new System.Windows.Forms.Button();
             this.btnGo = new System.Windows.Forms.Button();
-            this.cboCells = new System.Windows.Forms.ComboBox();
+            this.btnClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).BeginInit();
             this.SuspendLayout();
@@ -49,6 +49,7 @@
             this.pbGrid.Size = new System.Drawing.Size(913, 450);
             this.pbGrid.TabIndex = 0;
             this.pbGrid.TabStop = false;
+            this.pbGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbGrid_MouseClick);
             // 
             // numSSize
             // 
@@ -116,20 +117,23 @@
             this.btnGo.UseVisualStyleBackColor = true;
             this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
             // 
-            // cboCells
+            // btnClear
             // 
-            this.cboCells.FormattingEnabled = true;
-            this.cboCells.Location = new System.Drawing.Point(399, 521);
-            this.cboCells.Name = "cboCells";
-            this.cboCells.Size = new System.Drawing.Size(197, 23);
-            this.cboCells.TabIndex = 6;
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnClear.Location = new System.Drawing.Point(258, 504);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 6;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // ConwayMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 581);
-            this.Controls.Add(this.cboCells);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnGo);
             this.Controls.Add(this.btnAdvance);
             this.Controls.Add(this.btnReset);
@@ -156,6 +160,6 @@
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnAdvance;
         private System.Windows.Forms.Button btnGo;
-        private System.Windows.Forms.ComboBox cboCells;
+        private System.Windows.Forms.Button btnClear;
     }
 }

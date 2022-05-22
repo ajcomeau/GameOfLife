@@ -22,11 +22,11 @@ namespace GameOfLife
 
         private void ConwayMain_Load(object sender, EventArgs e)
         {
-            CreateGridSurface();
+            CreateGridSurface(true);
             //GetActiveCounts();
         }
 
-        private void CreateGridSurface()
+        private void CreateGridSurface(bool RandomCells)
         {
             Point locPoint;
             Cell newCell;
@@ -47,7 +47,10 @@ namespace GameOfLife
                 for (int x = 0; x < cols; x++)
                 {
                     newCell = new Cell(x, y, (int)numSSize.Value);
-                    newCell.IsAlive = (random.Next(100) < 15) ? true : false;
+                    if (RandomCells)
+                        newCell.IsAlive = (random.Next(100) < 15) ? true : false;
+                    else
+                        newCell.IsAlive = false;
                 }
             }
 
@@ -57,21 +60,9 @@ namespace GameOfLife
 
         }
 
-        private void GetActiveCounts()
-        {
-            cboCells.Items.Clear();
-            // Demo function to test LiveAdjacent function.
-            foreach (Cell Cell in Grid.gridCells)
-            {
-                cboCells.Items.Add($"X:{Cell.XPos}, Y:{Cell.YPos}, Count: {CellGrid.LiveAdjacent(Cell)}");
-            }
-
-        }
-
         private void btnReset_Click(object sender, EventArgs e)
         {
-            CreateGridSurface();
-            //GetActiveCounts();
+            CreateGridSurface(true);
         }
 
         private void GetNextState()
@@ -173,6 +164,31 @@ namespace GameOfLife
             InProgress = false;
             Application.Exit();
             
+        }
+
+        private void pbGrid_MouseClick(object sender, MouseEventArgs e)
+        {
+            int CellIndex;
+            // Get cell size from first cell on grid.
+            Size cellSize = Grid.gridCells[0].CellSize;
+
+            // Determine grid index from grid location and cell size.
+            int XLoc = (int)(e.X / cellSize.Width);
+            int YLoc = (int)(e.Y / cellSize.Height);
+
+            // Get cell list index from grid index.
+            CellIndex = (YLoc * CellGrid.Columns) + XLoc;
+
+            // Flip cell status between dead and alive.
+            Grid.gridCells[CellIndex].IsAlive = !Grid.gridCells[CellIndex].IsAlive;
+
+            // Update grid.
+            UpdateGrid(CellGrid);
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            CreateGridSurface(false);
         }
     }
 
