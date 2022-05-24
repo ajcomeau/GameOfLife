@@ -35,8 +35,18 @@
             this.btnAdvance = new System.Windows.Forms.Button();
             this.btnGo = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.mMain = new System.Windows.Forms.MenuStrip();
+            this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.goToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).BeginInit();
+            this.mMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbGrid
@@ -128,6 +138,75 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
+            // mMain
+            // 
+            this.mMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gameToolStripMenuItem});
+            this.mMain.Location = new System.Drawing.Point(0, 0);
+            this.mMain.Name = "mMain";
+            this.mMain.Size = new System.Drawing.Size(944, 24);
+            this.mMain.TabIndex = 7;
+            this.mMain.Text = "menuStrip1";
+            // 
+            // gameToolStripMenuItem
+            // 
+            this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.resetGridToolStripMenuItem,
+            this.clearGridToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.advanceToolStripMenuItem,
+            this.goToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.exitToolStripMenuItem});
+            this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
+            this.gameToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.gameToolStripMenuItem.Text = "&Game";
+            // 
+            // resetGridToolStripMenuItem
+            // 
+            this.resetGridToolStripMenuItem.Name = "resetGridToolStripMenuItem";
+            this.resetGridToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetGridToolStripMenuItem.Text = "&Reset Grid";
+            this.resetGridToolStripMenuItem.Click += new System.EventHandler(this.resetGridToolStripMenuItem_Click);
+            // 
+            // clearGridToolStripMenuItem
+            // 
+            this.clearGridToolStripMenuItem.Name = "clearGridToolStripMenuItem";
+            this.clearGridToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearGridToolStripMenuItem.Text = "&Clear Grid";
+            this.clearGridToolStripMenuItem.Click += new System.EventHandler(this.clearGridToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // advanceToolStripMenuItem
+            // 
+            this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
+            this.advanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.advanceToolStripMenuItem.Text = "&Advance";
+            this.advanceToolStripMenuItem.Click += new System.EventHandler(this.advanceToolStripMenuItem_Click);
+            // 
+            // goToolStripMenuItem
+            // 
+            this.goToolStripMenuItem.Name = "goToolStripMenuItem";
+            this.goToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.goToolStripMenuItem.Text = "&Go";
+            this.goToolStripMenuItem.Click += new System.EventHandler(this.goToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // ConwayMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -140,6 +219,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numSSize);
             this.Controls.Add(this.pbGrid);
+            this.Controls.Add(this.mMain);
+            this.MainMenuStrip = this.mMain;
             this.MinimumSize = new System.Drawing.Size(960, 620);
             this.Name = "ConwayMain";
             this.Text = "Conway\'s Game of Life";
@@ -147,6 +228,8 @@
             this.Load += new System.EventHandler(this.ConwayMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).EndInit();
+            this.mMain.ResumeLayout(false);
+            this.mMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -161,5 +244,14 @@
         private System.Windows.Forms.Button btnAdvance;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.MenuStrip mMain;
+        private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetGridToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearGridToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem goToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }

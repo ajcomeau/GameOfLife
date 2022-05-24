@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GameOfLife
@@ -28,7 +25,6 @@ namespace GameOfLife
 
         private void CreateGridSurface(bool RandomCells)
         {
-            Point locPoint;
             Cell newCell;
             Random random = new Random();
 
@@ -112,7 +108,6 @@ namespace GameOfLife
 
         private void UpdateGrid(Grid GridDisplay)
         {
-            Cell newCell;
             Random random = new Random();
 
             // Create new image and update picture box.
@@ -130,13 +125,13 @@ namespace GameOfLife
                     }
                 }
 
-                if(pbGrid.Image != null)                
+                if (pbGrid.Image != null)
                     pbGrid.Image.Dispose();  // Release resources from previous image.
-                
+
                 pbGrid.Image = (Bitmap)bmp.Clone();
             }
         }
-        
+
         private void btnAdvance_Click(object sender, EventArgs e)
         {
             GetNextState();
@@ -144,11 +139,17 @@ namespace GameOfLife
 
         private void btnGo_Click(object sender, EventArgs e)
         {
+            Go();
+        }
+
+        private void Go()
+        {
             // Flip the in progress variable.
             InProgress = !InProgress;
 
             // Change the text in the button.
             btnGo.Text = InProgress ? "Stop" : "Go";
+            goToolStripMenuItem.Text = InProgress ? "Stop" : "Go";
 
             // While inProgess = true, continue to update the grid.
             while (InProgress)
@@ -163,7 +164,7 @@ namespace GameOfLife
             // Make sure the program ends when the form is closed.
             InProgress = false;
             Application.Exit();
-            
+
         }
 
         private void pbGrid_MouseClick(object sender, MouseEventArgs e)
@@ -173,8 +174,8 @@ namespace GameOfLife
             Size cellSize = Grid.gridCells[0].CellSize;
 
             // Determine grid index from grid location and cell size.
-            int XLoc = (int)(e.X / cellSize.Width);
-            int YLoc = (int)(e.Y / cellSize.Height);
+            int XLoc = e.X / cellSize.Width;
+            int YLoc = e.Y / cellSize.Height;
 
             // Get cell list index from grid index.
             CellIndex = (YLoc * CellGrid.Columns) + XLoc;
@@ -190,6 +191,36 @@ namespace GameOfLife
         {
             CreateGridSurface(false);
         }
+
+        private void resetGridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Reset the grid with a new random pattern.
+            CreateGridSurface(true);
+
+        }
+
+        private void clearGridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Clear the grid for a blank surface.
+            CreateGridSurface(false);
+
+        }
+
+        private void advanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Advance the simulation by one frame.
+            GetNextState();
+        }
+
+        private void goToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Go();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 
     public class Grid
@@ -201,8 +232,8 @@ namespace GameOfLife
 
         public Grid(int rows, int columns)
         {
-            this.Rows = rows;
-            this.Columns = columns;
+            Rows = rows;
+            Columns = columns;
         }
 
         public int Rows
@@ -225,16 +256,16 @@ namespace GameOfLife
             int liveAdjacent = 0;
 
             // Get range of cells to be examined for active neighbors.
-            int cellIndex = (cell.YPos * this.Columns) + cell.XPos;
-            int startIndex = cellIndex - this.Columns - 2;
-            int endIndex = cellIndex + this.Columns + 2;
+            int cellIndex = (cell.YPos * Columns) + cell.XPos;
+            int startIndex = cellIndex - Columns - 2;
+            int endIndex = cellIndex + Columns + 2;
 
             // Ensure that the start and end indexes don't exceed the grid range.
             startIndex = (startIndex < 0) ? 0 : startIndex;
             endIndex = (endIndex > (Grid.gridCells.Count - 1)) ? Grid.gridCells.Count - 1 : endIndex;
 
             // Iterate through the defined range and look for active neighbors.
-            for(int x = startIndex; x < endIndex; x++)
+            for (int x = startIndex; x < endIndex; x++)
             {
                 if (Math.Abs(cell.XPos - gridCells[x].XPos) < 2 && Math.Abs(cell.YPos - gridCells[x].YPos) < 2)
                 {
@@ -267,25 +298,25 @@ namespace GameOfLife
         {
             int cellSize;
             // Set object settings and add to grid.
-            this.Location = location;
-            this.YPos = Y;
-            this.XPos = X;
+            Location = location;
+            YPos = Y;
+            XPos = X;
             Grid.gridCells.Add(this);
             // If location is not 0, divide pixel location by grid location to get the size of the cell.
             cellSize = (X == 0) ? 0 : location.X / X;
 
             // Create rectangle to display as needed using calculated cell size.
-            this.CellDisplay = new Rectangle(this.Location, new Size(cellSize, cellSize));
+            CellDisplay = new Rectangle(Location, new Size(cellSize, cellSize));
         }
 
         public Cell(int X, int Y, int CellSize)
         {
-            this.Location = new Point(X * CellSize, Y * CellSize);
-            this.XPos = X;
-            this.YPos = Y;
+            Location = new Point(X * CellSize, Y * CellSize);
+            XPos = X;
+            YPos = Y;
             this.CellSize = new Size(CellSize, CellSize);
             Grid.gridCells.Add(this);
-            this.CellDisplay = new Rectangle(this.Location, new Size(CellSize - 1, CellSize - 1));
+            CellDisplay = new Rectangle(Location, new Size(CellSize - 1, CellSize - 1));
         }
 
         public Rectangle CellDisplay
@@ -308,13 +339,13 @@ namespace GameOfLife
             get { return cLocation; }
             set { cLocation = value; }
         }
-        
+
         public int XPos
         {
             // Cell number on X-axis
             get { return cXPos; }
             set { cXPos = value; }
-        }       
+        }
 
         public int YPos
         {
@@ -339,7 +370,7 @@ namespace GameOfLife
         public override string ToString()
         {
             //Override the cell ToString to provide location information.
-            return $"GridX:{this.XPos}  GridY:{this.YPos}  LocX:{this.Location.X}  LocY:{this.Location.Y}";
+            return $"GridX:{XPos}  GridY:{YPos}  LocX:{Location.X}  LocY:{Location.Y}";
         }
 
     }
