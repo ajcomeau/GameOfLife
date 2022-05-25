@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace GameOfLife
 {
@@ -156,6 +157,11 @@ namespace GameOfLife
             {
                 GetNextState();
                 Application.DoEvents();
+
+                if(nudDelay.Value > 0)
+                {
+                    Thread.Sleep((int)nudDelay.Value);
+                }
             }
         }
 

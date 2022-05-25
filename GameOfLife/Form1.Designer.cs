@@ -44,9 +44,12 @@
             this.goToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nudDelay = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).BeginInit();
             this.mMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).BeginInit();
             this.SuspendLayout();
             // 
             // pbGrid
@@ -165,53 +168,76 @@
             // resetGridToolStripMenuItem
             // 
             this.resetGridToolStripMenuItem.Name = "resetGridToolStripMenuItem";
-            this.resetGridToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetGridToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.resetGridToolStripMenuItem.Text = "&Reset Grid";
             this.resetGridToolStripMenuItem.Click += new System.EventHandler(this.resetGridToolStripMenuItem_Click);
             // 
             // clearGridToolStripMenuItem
             // 
             this.clearGridToolStripMenuItem.Name = "clearGridToolStripMenuItem";
-            this.clearGridToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearGridToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.clearGridToolStripMenuItem.Text = "&Clear Grid";
             this.clearGridToolStripMenuItem.Click += new System.EventHandler(this.clearGridToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(124, 6);
             // 
             // advanceToolStripMenuItem
             // 
             this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
-            this.advanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.advanceToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.advanceToolStripMenuItem.Text = "&Advance";
             this.advanceToolStripMenuItem.Click += new System.EventHandler(this.advanceToolStripMenuItem_Click);
             // 
             // goToolStripMenuItem
             // 
             this.goToolStripMenuItem.Name = "goToolStripMenuItem";
-            this.goToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.goToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.goToolStripMenuItem.Text = "&Go";
             this.goToolStripMenuItem.Click += new System.EventHandler(this.goToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(124, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // nudDelay
+            // 
+            this.nudDelay.Location = new System.Drawing.Point(424, 506);
+            this.nudDelay.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.nudDelay.Name = "nudDelay";
+            this.nudDelay.Size = new System.Drawing.Size(63, 23);
+            this.nudDelay.TabIndex = 8;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(352, 508);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 15);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Delay (ms):";
             // 
             // ConwayMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(944, 581);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.nudDelay);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnGo);
             this.Controls.Add(this.btnAdvance);
@@ -230,6 +256,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).EndInit();
             this.mMain.ResumeLayout(false);
             this.mMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -253,5 +280,7 @@
         private System.Windows.Forms.ToolStripMenuItem goToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown nudDelay;
+        private System.Windows.Forms.Label label2;
     }
 }
