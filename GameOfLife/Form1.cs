@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace GameOfLife
 {
@@ -158,7 +159,7 @@ namespace GameOfLife
                 GetNextState();
                 Application.DoEvents();
 
-                if(nudDelay.Value > 0)
+                if (nudDelay.Value > 0)
                 {
                     Thread.Sleep((int)nudDelay.Value);
                 }
@@ -227,6 +228,54 @@ namespace GameOfLife
         {
             Application.Exit();
         }
+
+        private void loadPatternToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog fdOpen = new OpenFileDialog())
+                {
+                    fdOpen.Title = "Select location of file.";
+                    fdOpen.Filter = "gam files (*.gam)|*.gam|All files (*.*)|*.*";
+
+                    if (fdOpen.ShowDialog() == DialogResult.OK)
+                    {
+                        CellGrid.LoadGrid(fdOpen.FileName, pbGrid.Size);
+                    }
+                }
+
+                UpdateGrid(CellGrid);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was a problem loading the specified file.\n" + ex.Message);
+            }
+
+        }
+
+        private void savePatternToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                using (SaveFileDialog fdSave = new SaveFileDialog())
+                {
+                    fdSave.Title = "Select location for save file.";
+                    fdSave.Filter = "gam files (*.gam)|*.gam|All files (*.*)|*.*";
+
+                    if (fdSave.ShowDialog() == DialogResult.OK)
+                    {
+                        CellGrid.SaveGrid(fdSave.FileName);
+                    }
+                    MessageBox.Show("File saved.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was a problem saving the specified pattern.\n" + ex.Message);
+            }
+
+        }
     }
 
     public class Grid
@@ -288,7 +337,127 @@ namespace GameOfLife
             return liveAdjacent;
         }
 
+        public void LoadGrid(string filePath, Size displaySize)
+        {
+            string? lineText;
+            string startText = "", gridString = "";
+            int cellSize = 10, rows, cols, maxSize, cellCount;
+            Cell newCell;
+
+            try
+            {
+                // Clear the list of cells.
+                gridCells.Clear();
+
+                // Read file.
+                using (StreamReader loadFile = new StreamReader(filePath))
+                {
+                    while (!loadFile.EndOfStream)
+                    {
+                        // Get line from file.
+                        lineText = loadFile.ReadLine();
+
+                        if (lineText != null)
+                        {
+                            // Get the first character.
+                            startText = lineText.Substring(0, 1);
+
+                            if (lineText.Substring(0, 4) == "Cell")
+                            {
+                                // If the line starts with "Cell", it's the cell size.
+                                int.TryParse(lineText.Substring(lineText.IndexOf(":") + 1), out int result);
+                                cellSize = result;
+                            }
+                            else if (startText == "0" || startText == "1")
+                            {
+                                // If the line starts with 0 or 1, treat it as part of the grid.
+                                gridString += lineText;
+                            }
+                        }
+                    }
+                }
+
+                // Determine maximum cell size supported by number of cells and the display size.
+                // If it's smaller than the current spec, update the assumed cell size.
+                maxSize = (int)Math.Sqrt((displaySize.Width * displaySize.Height) / gridString.Length);
+                maxSize = maxSize > 25 ? 25 : maxSize;
+                cellSize = (maxSize < cellSize) ? maxSize : cellSize;
+
+                // Determine the number of rows and columns in the grid.
+                rows = displaySize.Height / cellSize;
+                cols = displaySize.Width / cellSize;
+
+                Rows = rows;
+                Columns = cols;
+
+                // Create the cells in the List<Cell> collection. 
+                cellCount = 0;
+                for (int y = 0; y < rows; y++)
+                {
+                    for (int x = 0; x < cols; x++)
+                    {
+                        // Create new cell and turn it on or off as specified.
+                        // If the number of cells needed exceeds the number of cells specified
+                        // in the file, set all the ones after to IsAlive = False.
+                        newCell = new Cell(x, y, cellSize);
+
+                        if (cellCount < gridString.Length)
+                            newCell.IsAlive = (gridString[cellCount]) == '1' ? true : false;
+                        else
+                            newCell.IsAlive = false;
+
+                        cellCount++;
+                    }
+                }
+
+                // Sort the grid at the end.  
+                Grid.gridCells = Grid.gridCells.OrderBy(c => c.XPos).OrderBy(c => c.YPos).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+ 
+
+        }
+
+        public void SaveGrid(string filePath)
+        {
+            string rowString = "";
+            int cellIndex = 0;
+
+            try
+            {
+                using (StreamWriter saveFile = new StreamWriter(filePath))
+                {
+                    saveFile.WriteLine($"Cell size: {gridCells[0].CellSize.Width.ToString()} ");
+                    saveFile.WriteLine("-- BEGIN GRID --");
+                    // Save the current grid to a text file.
+                    for (int y = 0; y < Rows; y++)
+                    {
+                        for (int x = 0; x < Columns; x++)
+                        {
+                            rowString += gridCells[cellIndex].IsAlive ? "1" : "0";
+                            cellIndex++;
+                        }
+                        saveFile.WriteLine(rowString);
+                        rowString = "";
+                    }
+                    saveFile.WriteLine("-- END GRID --");
+                    saveFile.Flush();
+                    saveFile.Close();
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
     }
+
 
     public class Cell
     {
@@ -300,6 +469,11 @@ namespace GameOfLife
         private Boolean cIsAlive;
         private Boolean cNext;
 
+        public Cell(int CellSize)
+        {
+            Grid.gridCells.Add(this);
+            this.CellSize = new Size(CellSize, CellSize);
+        }
         public Cell(Point location, int X, int Y)
         {
             int cellSize;
@@ -310,9 +484,6 @@ namespace GameOfLife
             Grid.gridCells.Add(this);
             // If location is not 0, divide pixel location by grid location to get the size of the cell.
             cellSize = (X == 0) ? 0 : location.X / X;
-
-            // Create rectangle to display as needed using calculated cell size.
-            CellDisplay = new Rectangle(Location, new Size(cellSize, cellSize));
         }
 
         public Cell(int X, int Y, int CellSize)
@@ -322,7 +493,6 @@ namespace GameOfLife
             YPos = Y;
             this.CellSize = new Size(CellSize, CellSize);
             Grid.gridCells.Add(this);
-            CellDisplay = new Rectangle(Location, new Size(CellSize - 1, CellSize - 1));
         }
 
         public Rectangle CellDisplay
@@ -336,7 +506,12 @@ namespace GameOfLife
         {
             // Calculated cell size.
             get { return cCellSize; }
-            set { cCellSize = value; }
+            set
+            {
+                cCellSize = value;
+                // Update the display rectangle at the same time.
+                CellDisplay = new Rectangle(Location, new Size(value.Width - 1, value.Height - 1));
+            }
         }
 
         public Point Location
@@ -376,7 +551,7 @@ namespace GameOfLife
         public override string ToString()
         {
             //Override the cell ToString to provide location information.
-            return $"GridX:{XPos}  GridY:{YPos}  LocX:{Location.X}  LocY:{Location.Y}";
+            return $"GridX:{XPos}  GridY:{YPos}  Alive:{IsAlive}  Next:{NextStatus}";
         }
 
     }

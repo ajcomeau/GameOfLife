@@ -42,10 +42,14 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.goToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nudDelay = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
+            this.fdSave = new System.Windows.Forms.SaveFileDialog();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadPatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.savePatternToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSSize)).BeginInit();
             this.mMain.SuspendLayout();
@@ -144,6 +148,7 @@
             // mMain
             // 
             this.mMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
             this.gameToolStripMenuItem});
             this.mMain.Location = new System.Drawing.Point(0, 0);
             this.mMain.Name = "mMain";
@@ -158,9 +163,7 @@
             this.clearGridToolStripMenuItem,
             this.toolStripSeparator1,
             this.advanceToolStripMenuItem,
-            this.goToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.exitToolStripMenuItem});
+            this.goToolStripMenuItem});
             this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
             this.gameToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.gameToolStripMenuItem.Text = "&Game";
@@ -198,18 +201,6 @@
             this.goToolStripMenuItem.Text = "&Go";
             this.goToolStripMenuItem.Click += new System.EventHandler(this.goToolStripMenuItem_Click);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(124, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
             // nudDelay
             // 
             this.nudDelay.Location = new System.Drawing.Point(424, 506);
@@ -230,6 +221,42 @@
             this.label2.Size = new System.Drawing.Size(66, 15);
             this.label2.TabIndex = 9;
             this.label2.Text = "Delay (ms):";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadPatternToolStripMenuItem,
+            this.savePatternToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // loadPatternToolStripMenuItem
+            // 
+            this.loadPatternToolStripMenuItem.Name = "loadPatternToolStripMenuItem";
+            this.loadPatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadPatternToolStripMenuItem.Text = "&Load Pattern";
+            this.loadPatternToolStripMenuItem.Click += new System.EventHandler(this.loadPatternToolStripMenuItem_Click);
+            // 
+            // savePatternToolStripMenuItem
+            // 
+            this.savePatternToolStripMenuItem.Name = "savePatternToolStripMenuItem";
+            this.savePatternToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.savePatternToolStripMenuItem.Text = "&Save Pattern";
+            this.savePatternToolStripMenuItem.Click += new System.EventHandler(this.savePatternToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // ConwayMain
             // 
@@ -278,9 +305,13 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem goToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown nudDelay;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.SaveFileDialog fdSave;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadPatternToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem savePatternToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
